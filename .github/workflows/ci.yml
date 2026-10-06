@@ -1,0 +1,36 @@
+name: build-and-test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      DATABASE_URL: mysql://test:test@127.0.0.1:3306/test
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm --prefix backend ci --include=dev
+      - run: npm --prefix frontend ci --include=dev
+      - run: npm --prefix agent ci --include=dev
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+      - run: python backend/tests/musicdl-worker.test.py
+      - run: npm run prepare:source

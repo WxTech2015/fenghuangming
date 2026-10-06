@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+model SystemLock {
+  id String @id @db.VarChar(100)
+}
+model Setting {
+  id String @id @db.VarChar(100)
+  value Json
+}
+model Zone {
+  id String @id @db.VarChar(100)
+  name String @db.VarChar(80)
+  volume Int
+  enabled Boolean
+  revision Int
+  currentItemId String? @db.VarChar(100)
+  priorityStreak Int
+}
+model GroupBinding {
+  id String @id @db.VarChar(100)
+  botId String @db.VarChar(100)
+  groupId String @db.VarChar(100)
+  zoneId String @db.VarChar(100)
+  enabled Boolean
+  @@unique([botId, groupId])
+  @@index([zoneId])
+}
+model Agent {
+  id String @id @db.VarChar(100)
+  name String @db.VarChar(80)
+  zoneId String @unique @db.VarChar(100)
+  tokenHash String @unique @db.VarChar(64)
+  lastSeen String? @db.VarChar(40)
+  ready Boolean
+  epoch Int
+  position Float
+  paused Boolean
+}
+model QueueItem {
+  id String @id @db.VarChar(100)
+  zoneId String @db.VarChar(100)
+  requestKey String @unique @db.VarChar(200)
+  userId String @db.VarChar(100)
+  userName String @db.VarChar(100)
+  groupId String @db.VarChar(100)
+  botId String @db.VarChar(100)
+  track Json
+  engine String @db.VarChar(20)
+  status String @db.VarChar(20)
+  priority Int
+  promotedAt String? @db.VarChar(40)
+  createdAt String @db.VarChar(40)
+  playbackId String? @db.VarChar(100)
+  assetId String? @db.VarChar(100)
+  error String? @db.Text
+  reviewReason String? @db.Text
+  @@index([zoneId, status])
+}
+model Blacklist {
+  id String @id @db.VarChar(100)
+  kind String @db.VarChar(20)
+  value String @db.VarChar(300)
+  scope String @db.VarChar(20)
+  scopeId String @db.VarChar(100)
+  reason String @db.Text
+  createdAt String @db.VarChar(40)
+}
+model Quota {
+  id String @id @db.VarChar(191)
+  userId String @db.VarChar(100)
+  date String @db.VarChar(10)
+  used Int
+  @@unique([userId, date])
+}
+model QuotaEvent {
+  id String @id @db.VarChar(100)
+  quotaId String @db.VarChar(191)
+  itemId String @db.VarChar(100)
+  operation String @db.VarChar(20)
+  createdAt String @db.VarChar(40)
+}
+model Playlist {
+  id String @id @db.VarChar(100)
+  name String @db.VarChar(100)
+  zoneId String @db.VarChar(100)
+  tracks Json
+  createdAt String @db.VarChar(40)
+}
+model Command {
+  id String @id @db.VarChar(100)
+  agentId String @db.VarChar(100)
+  zoneId String @db.VarChar(100)
+  itemId String? @db.VarChar(100)
+  epoch Int
+  payload Json
+  state String @db.VarChar(20)
+  createdAt String @db.VarChar(40)
+  expiresAt String @db.VarChar(40)
+  @@index([agentId, state])
+}
+model MediaAsset {
+  id String @id @db.VarChar(100)
+  trackKey String @unique @db.VarChar(64)
+  filename String @db.VarChar(100)
+  mime String @db.VarChar(100)
+  bytes Int
+  sha256 String @db.VarChar(64)
+  durationSeconds Float @default(0)
+  source Json?
+  createdAt String @db.VarChar(40)
+  lastAccessedAt String @db.VarChar(40)
+}
+model Audit {
+  id String @id @db.VarChar(100)
+  action String @db.VarChar(100)
+  targetId String @db.VarChar(200)
+  detail String @db.Text
+  createdAt String @db.VarChar(40)
+}

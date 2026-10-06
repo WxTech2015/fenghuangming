@@ -1,0 +1,59 @@
+{
+  "name": "@qqmusic/server",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "prisma generate && tsc && node scripts/copy-assets.cjs && concurrently -k -n compile,app \"tsc --watch --preserveWatchOutput\" \"node --watch dist/main.js\"",
+    "start": "node dist/main.js",
+    "build": "prisma generate && tsc && node scripts/copy-assets.cjs",
+    "typecheck": "prisma generate && tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@meting/core": "1.6.1",
+    "@nestjs/common": "11.2.7",
+    "@nestjs/core": "11.2.7",
+    "@nestjs/platform-express": "11.2.7",
+    "@neteasecloudmusicapienhanced/api": "4.41.0",
+    "@prisma/client": "6.19.3",
+    "dotenv": "^16.6.1",
+    "fflate": "0.8.3",
+    "music-metadata": "^11.10.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "tar-stream": "3.2.0",
+    "ws": "^8.18.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/tar-stream": "3.1.4",
+    "@types/ws": "^8.18.0",
+    "prisma": "6.19.3",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3",
+    "@types/node": "^24.0.0",
+    "concurrently": "^9.2.0",
+    "vitest": "5.0.3"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.2": true,
+    "prisma@6.19.3": true
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.0"
+    },
+    "get-uri": {
+      "basic-ftp": "6.2.2"
+    }
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,7 @@
+{
+  "serverUrl": "http://music.example.com",
+  "token": "替换成后台注册设备时生成的完整设备凭证",
+  "mpvPath": "auto",
+  "dataDir": "C:\\ProgramData\\QQMusicAgent",
+  "cacheMaxMb": 2048
+}
