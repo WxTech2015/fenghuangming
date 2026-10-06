@@ -1,6 +1,6 @@
 # 凤凰鸣架构
 
-前端、后端与 Agent 为三个独立项目。NapCat 部署在 QQ 登录电脑，前后端与 MySQL 部署在 Linux 公网服务器，Agent 部署在 Windows 播放电脑。NapCat 和 Agent 均主动连接后端，播放电脑不需要公网 IP。
+本仓库维护前端与后端，Windows 播放端在独立的 [Agent 仓库](https://github.com/WxTech2015/fenghuangming-agent) 维护。NapCat 部署在 QQ 登录电脑，前后端与 MySQL 部署在 Linux 公网服务器，Agent 部署在 Windows 播放电脑。NapCat 和 Agent 均主动连接后端，播放电脑不需要公网 IP。
 
 ```mermaid
 flowchart LR
@@ -29,12 +29,10 @@ flowchart LR
 | `backend/src/queues` | 点歌、歌单、黑名单、插队额度与队列操作 |
 | `backend/src/playback` | 调度、持久命令、播放状态和断线协调 |
 | `backend/src/transport` | NapCat 与 Agent 的独立 WebSocket 入口 |
-| `agent/src/service.ts` | 联网、租约、持久事件、本机控制与紧急制动 |
-| `agent/src/worker.ts` / `mpv.ts` | 用户会话播放器、进度、音频输出和恢复 |
-| `agent/src/download.ts` | 本机缓存、分段下载与 SHA-256 校验 |
-| `agent/scripts` | Windows 服务与登录任务、桌面控制台和独立程序打包 |
 
-共享协议以 `backend/src/contracts/index.ts` 为维护入口，前端与 Agent 带独立副本。修改后运行根目录 `npm run sync:contracts`，各项目运行时不依赖其他目录。
+Agent 仓库的 `src/service.ts` 负责联网、租约与紧急制动，`src/worker.ts`、`src/mpv.ts` 负责用户会话播放和恢复，`src/download.ts` 负责音频缓存，`scripts/` 维护桌面控制台、服务安装与独立程序打包。
+
+共享协议以本仓库 `backend/src/contracts/index.ts` 为维护入口，前端与 Agent 带独立副本。修改后运行根目录 `npm run sync:contracts` 更新前端；播放端协议变更需单独更新 Agent 仓库的 `src/contracts/index.ts`。两个仓库各自构建，运行时不依赖彼此的源码目录。
 
 ## QQ 群与设备
 

@@ -117,7 +117,7 @@ Windows 解压 Agent 发行包，将下载的 `agent.config.json` 放在 `fenghu
 .\fenghuangming-agent.exe --install --config .\agent.config.json
 ```
 
-也可复制后台注册设备后提供的安装命令。程序自动配置 NSSM 服务和用户登录任务，无需另装 Node.js、mpv 或 NSSM。Agent 主动连接，无需公网 IP，播放用户需要保持登录；详细维护步骤见 [Agent 说明](../../agent/README.md)。
+也可复制后台注册设备后提供的安装命令。程序自动配置 NSSM 服务和用户登录任务，无需另装 Node.js、mpv 或 NSSM。Agent 主动连接，无需公网 IP，播放用户需要保持登录；源码与详细维护步骤见独立的 [Agent 仓库](https://github.com/WxTech2015/fenghuangming-agent#readme)。
 
 在「音源与设置」选择 GitHub 下载方式并保存，默认自动测速选择节点，然后点击安装需要的 go-music-dl / musicdl；Meting 与 api-enhanced 随后端 Node 依赖安装。群里发送 `#menu`、音乐卡片或链接验证。
 

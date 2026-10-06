@@ -11,14 +11,13 @@
     "node": ">=24"
   },
   "scripts": {
-    "install:all": "npm --prefix backend install && npm --prefix frontend install && npm --prefix agent install",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
     "dev": "concurrently -k -n server,web \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
-    "build": "npm --prefix backend run build && npm --prefix frontend run build && npm --prefix agent run build",
-    "typecheck": "npm --prefix backend run typecheck && npm --prefix frontend run typecheck && npm --prefix agent run typecheck",
-    "test": "npm --prefix backend test && npm --prefix agent test",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "typecheck": "npm --prefix backend run typecheck && npm --prefix frontend run typecheck",
+    "test": "npm --prefix backend test",
     "db:generate": "npm --prefix backend run db:generate",
     "db:push": "npm --prefix backend run db:push",
-    "agent": "npm --prefix agent start",
     "sync:contracts": "node backend/scripts/sync-contracts.cjs",
     "prepare:source": "node backend/scripts/source-package.cjs"
   },

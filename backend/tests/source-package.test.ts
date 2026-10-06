@@ -11,7 +11,7 @@ const roots: string[] = [];
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'fenghuangming-source-test-')); roots.push(root);
   for (const name of ['README.md', 'LICENSE', 'CONTRIBUTING.md', 'SECURITY.md', 'THIRD_PARTY.md', '.gitignore', '.gitattributes', 'package.json', 'package-lock.json']) await writeFile(join(root, name), name);
-  await mkdir(join(root, 'backend/src'), { recursive: true }); await mkdir(join(root, 'agent/release'), { recursive: true });
+  await mkdir(join(root, 'backend/src'), { recursive: true }); await mkdir(join(root, 'agent/src'), { recursive: true }); await mkdir(join(root, 'agent/release'), { recursive: true });
   await writeFile(join(root, 'backend/src/example.ts'), 'export const value = 1;');
   return root;
 }
@@ -28,9 +28,12 @@ test('源码包仅收录公开文件并保存哈希清单', async () => {
   await writeFile(join(root, 'backend/src/agent.config.json'), '{"token":"private"}');
   await writeFile(join(root, 'backend/src/debug.log'), 'private logs');
   await writeFile(join(root, 'agent/release/old.exe'), 'binary');
+  await writeFile(join(root, 'agent/src/main.ts'), 'export const separateAgent = true;');
+  await writeFile(join(root, 'agent/README.md'), '独立 Agent 仓库');
   const result = createSourcePackage(root); const files = unzipSync(readFileSync(result.filename));
   expect(Object.keys(files)).toContain('fenghuangming/backend/.env.example');
   expect(Object.keys(files).some(name => /\/\.env$|agent\.config\.json|debug\.log|old\.exe/.test(name))).toBe(false);
+  expect(Object.keys(files).some(name => name.startsWith('fenghuangming/agent/'))).toBe(false);
   const manifest = JSON.parse(Buffer.from(files['fenghuangming/SOURCE_MANIFEST.json']!).toString());
   expect(manifest.files.find((file: any) => file.path === 'backend/src/example.ts').sha256).toMatch(/^[a-f0-9]{64}$/);
 });

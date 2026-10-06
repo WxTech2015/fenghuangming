@@ -4,15 +4,16 @@
 
 公司：青州正宸电子科技有限公司 · 开发者：晚霞 · 协议：[MIT](LICENSE)
 
-## 三个独立项目
+## 前后端仓库
 
 | 目录 | 部署位置 | 内容 |
 | --- | --- | --- |
 | [frontend](frontend/README.md) | Linux | Vue 3 / Naive UI 网页，构建后由 Nginx 提供 |
 | [backend](backend/README.md) | Linux | Node.js / MySQL、NapCat 接入、音源、队列和管理接口 |
-| [agent](agent/README.md) | Windows 播放电脑 | 独立 exe，内置 mpv 和 NSSM，一条命令安装 |
 
-三个目录可独立开发和部署。前后端使用 npm 安装和构建，需要 Node.js 24+；单独构建前端也支持 Node.js 22.13+。Linux 服务器通过宝塔安装 MySQL 8 和 Nginx。Windows Agent 使用发行包，无需安装 Node.js；源码打包命令为在 `agent` 目录执行 `npm run package:win`。
+本仓库维护前端与后端，两个目录可独立开发和部署。前后端使用 npm 安装和构建，需要 Node.js 24+；单独构建前端也支持 Node.js 22.13+。Linux 服务器通过宝塔安装 MySQL 8 和 Nginx。
+
+Windows 播放端在独立的 [fenghuangming-agent](https://github.com/WxTech2015/fenghuangming-agent) 仓库维护，内置 mpv、NSSM 和桌面控制台，使用发行包无需安装 Node.js。安装、构建与打包步骤见 [Agent 说明](https://github.com/WxTech2015/fenghuangming-agent#readme)。
 
 ## 宝塔部署
 
@@ -31,7 +32,7 @@ NapCat 仍部署在其原服务器。Windows Agent 不需要公网 IP 或入站�
 
 ## 本地开发
 
-在根目录安装开发启动器，然后分别安装三个项目：
+在根目录安装开发启动器，然后安装前后端：
 
 ```powershell
 npm install
@@ -81,7 +82,7 @@ LOG_TRACE_ENABLED=
 
 常用群指令：`#menu`、`#点歌 <分享链接>`、`#正在播放`、`#队列`、`#我的`、`#插队 [任务编号]`、`#取消 [任务编号]`、`#歌单`、`#切歌`、`#暂停`、`#继续`、`#音量 0-100`。
 
-协议源码以 `backend/src/contracts/index.ts` 为维护入口；修改后在完整源码根目录运行 `npm run sync:contracts`，更新前端与 Agent 内置副本，各项目运行时不依赖其他目录。
+协议源码以 `backend/src/contracts/index.ts` 为维护入口；修改后在本仓库根目录运行 `npm run sync:contracts` 更新前端副本。涉及播放端的协议变更需同时更新 [Agent 仓库的协议副本](https://github.com/WxTech2015/fenghuangming-agent/blob/main/src/contracts/index.ts)，并验证兼容性。两个仓库各自构建，运行时不依赖彼此的源码目录。
 
 - [架构说明](backend/docs/architecture.md)
 - [Agent 协议](backend/docs/agent-protocol.md)

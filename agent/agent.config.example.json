@@ -1,7 +1,0 @@
-{
-  "serverUrl": "http://127.0.0.1:19988",
-  "token": "从后台设备页面注册后复制设备凭证",
-  "mpvPath": "auto",
-  "dataDir": "C:\\ProgramData\\QQMusicAgent",
-  "cacheMaxMb": 2048
-}

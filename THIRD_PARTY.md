@@ -12,8 +12,6 @@
 | [go-music-dl](https://github.com/guohuiyuan/go-music-dl) | 可选音源程序 | 管理员点击安装时获取官方发行包 |
 | [musicdl](https://github.com/CharlesPikachu/musicdl) | 可选 Python 音源 | 管理员点击安装时创建独立环境并安装固定版本 |
 | [GD Studio](https://music-api.gdstudio.xyz/) | 可选远程音源接口 | 在线服务，不随项目分发 |
-| [mpv Windows 构建](https://github.com/shinchiro/mpv-winbuild-cmake) | Windows 播放器 | 发行包保留该构建附带的许可证文件 |
-| [NSSM](https://nssm.cc/) | Windows 服务管理 | 上游声明 Public Domain |
-| [Node.js](https://nodejs.org/) | Agent 独立程序运行时 | 打包保留 Node.js LICENSE 与第三方声明 |
+| [Node.js](https://nodejs.org/) | 后端运行时 | 保留其原有许可证与第三方声明 |
 
-源码包只包含适配与打包代码，不包含上述第三方程序二进制。Agent 打包流程会附带软件声明与上游许可证，分发发行包时应一并保留。
+源码包只包含前后端代码与文档，不包含上述第三方程序二进制。Windows 播放器、NSSM 与独立程序的打包声明见 [Agent 仓库](https://github.com/WxTech2015/fenghuangming-agent/blob/main/THIRD_PARTY.md)。

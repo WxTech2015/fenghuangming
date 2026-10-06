@@ -5,8 +5,8 @@ const { zipSync, unzipSync } = require('fflate');
 
 // 发布清单不依赖 .gitignore，避免将本机配置与历史发行包带入源码。
 const rootFiles = ['README.md', 'LICENSE', 'CONTRIBUTING.md', 'SECURITY.md', 'THIRD_PARTY.md', '.gitignore', '.gitattributes', 'package.json', 'package-lock.json'];
-const projectFiles = ['README.md', 'LICENSE', '.gitignore', '.env.example', 'package.json', 'package-lock.json', 'tsconfig.json', 'tsconfig.base.json', 'vitest.config.mts', 'vite.config.ts', 'index.html', 'agent.config.example.json', 'agent.config.public.example.json'];
-const directories = ['.github', 'backend/src', 'backend/tests', 'backend/docs', 'backend/scripts', 'backend/prisma', 'frontend/src', 'agent/src', 'agent/tests', 'agent/scripts', 'agent/docs'];
+const projectFiles = ['README.md', 'LICENSE', '.gitignore', '.env.example', 'package.json', 'package-lock.json', 'tsconfig.json', 'tsconfig.base.json', 'vitest.config.mts', 'vite.config.ts', 'index.html'];
+const directories = ['.github', 'backend/src', 'backend/tests', 'backend/docs', 'backend/scripts', 'backend/prisma', 'frontend/src'];
 const blocked = new Set(['node_modules', 'dist', 'release', '.build', '.git', '.codex', '.agents', 'data', 'logs', 'coverage', '__pycache__']);
 const extensions = new Set(['.ts', '.mts', '.vue', '.css', '.json', '.cjs', '.py', '.md', '.txt', '.ps1', '.prisma', '.yml', '.yaml']);
 
@@ -18,7 +18,7 @@ function allowed(relative) {
 function collectFiles(root) {
   root = path.resolve(root);
   const result = [];
-  for (const project of ['backend', 'frontend', 'agent']) {
+  for (const project of ['backend', 'frontend']) {
     const directory = path.resolve(root, project);
     if (fs.existsSync(directory) && fs.lstatSync(directory).isSymbolicLink()) throw new Error(`发布目录不接受符号链接：${project}`);
   }
@@ -40,7 +40,7 @@ function collectFiles(root) {
     }
   }
   for (const file of rootFiles) add(file, true);
-  for (const project of ['backend', 'frontend', 'agent']) for (const file of projectFiles) add(`${project}/${file}`);
+  for (const project of ['backend', 'frontend']) for (const file of projectFiles) add(`${project}/${file}`);
   for (const directory of directories) {
     const filename = path.resolve(root, directory);
     if (!fs.existsSync(filename)) continue;
@@ -56,7 +56,7 @@ function localSecrets(root) {
     const trimmed = value.trim();
     if (trimmed.length >= 8 && !/^(test[-_]|fixture[-_]|example|replace-with|dev-password-change-me|change-me|从后台)/i.test(trimmed) && !trimmed.includes('change-me')) values.add(trimmed);
   }
-  for (const project of ['', 'backend', 'frontend', 'agent']) {
+  for (const project of ['', 'backend', 'frontend']) {
     const filename = path.resolve(root, project, '.env');
     if (!fs.existsSync(filename)) continue;
     for (const line of fs.readFileSync(filename, 'utf8').split(/\r?\n/)) {
@@ -67,18 +67,7 @@ function localSecrets(root) {
       if (/cookie/i.test(match[1])) for (const pair of value.split(';')) add(pair.slice(pair.indexOf('=') + 1));
     }
   }
-  function configs(relative) {
-    const directory = path.resolve(root, relative); if (!fs.existsSync(directory)) return;
-    for (const item of fs.readdirSync(directory, { withFileTypes: true })) {
-      if (item.isSymbolicLink()) continue;
-      if (item.isDirectory() && !['node_modules', 'dist', '.build', '.git', 'data'].includes(item.name)) configs(`${relative}/${item.name}`);
-      else if (item.isFile() && item.name === 'agent.config.json') {
-        const config = JSON.parse(fs.readFileSync(path.resolve(directory, item.name), 'utf8').replace(/^\uFEFF/, ''));
-        add(config.token); add(config.ipcSecret);
-      }
-    }
-  }
-  configs('agent'); return [...values];
+  return [...values];
 }
 function assertClean(relative, content, secrets) {
   const text = content.toString('utf8');

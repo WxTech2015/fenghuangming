@@ -28,7 +28,6 @@ jobs:
       - run: npm ci
       - run: npm --prefix backend ci --include=dev
       - run: npm --prefix frontend ci --include=dev
-      - run: npm --prefix agent ci --include=dev
       - run: npm run typecheck
       - run: npm run build
       - run: npm test

@@ -2,6 +2,10 @@
 
 检查日期：2026-10-06。检查范围为前端、后端、Windows Agent、共享协议、示例配置、依赖、文档和源码发布清单。
 
+Agent 随后拆分至独立的 [fenghuangming-agent](https://github.com/WxTech2015/fenghuangming-agent) 仓库。下述完整系统检查保留为拆分前的记录；本仓库的根目录命令与 CI 仅检查前后端，Agent 的类型检查、构建、测试和发行程序验证由其独立仓库执行。
+
+拆分后分别运行两个仓库的类型检查、构建与测试：后端 152 项、Agent 16 项、Python 5 项通过。前后端源码包收录 113 个文件，排除 Agent 目录；测试额外放入 Agent 源码与文档，确认不会混入发布包。协议副本哈希一致，前后端安装、构建、测试和源码打包命令不再依赖本机 Agent 目录。
+
 ## 验证方法
 
 ```bash
@@ -12,7 +16,7 @@ python backend/tests/musicdl-worker.test.py
 npm run prepare:source
 ```
 
-构建和测试使用 Node.js 24，在 Windows 执行；Python 适配器测试不依赖真实 musicdl 安装。GitHub 工作流配置了 Windows 与 Linux 的相同检查，实际工作流结果以仓库运行记录为准。共享协议三个副本需保持相同 SHA-256。
+构建和测试使用 Node.js 24，在 Windows 执行；Python 适配器测试不依赖真实 musicdl 安装。两个仓库分别配置 Windows 与 Linux 工作流，实际结果以各自运行记录为准。前后端协议副本及独立 Agent 仓库的副本需保持一致。
 
 结果：三个项目类型检查与构建通过；后端 20 个文件、152 项测试通过，Agent 5 个文件、16 项通过，Python 适配器 5 项通过，共 173 项。共享协议副本哈希一致。前端主资源仍有体积提示，不影响构建。
 
